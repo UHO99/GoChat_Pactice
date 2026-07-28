@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gochat/step1_simple_echo/api"
-	"gochat/step1_simple_echo/config"
+	"gochat/config"
+	"gochat/step2_simple_multi_broadcast/api"
 	"log"
 )
 
@@ -12,7 +12,7 @@ func main() {
 		log.Fatal("cannot load config : ", err)
 	}
 
-	srv := api.New(api.Options{Addr: ":" + cfg.Port})
+	srv := api.New(api.Options{Addr: ":" + cfg.StepTwoPort})
 
 	if err := srv.ListenAndServe(); err != nil {
 		log.Fatal("cannot start server : ", err)

@@ -1,6 +1,9 @@
 package api
 
-import "net/http"
+import (
+	"gochat/step2_simple_multi_broadcast/servers"
+	"net/http"
+)
 
 type Options struct {
 	Addr string
@@ -8,10 +11,11 @@ type Options struct {
 
 type Server struct {
 	httpServer *http.Server
+	hub        *servers.Hub
 }
 
 func New(opts Options) *Server {
-	s := &Server{}
+	s := &Server{hub: servers.NewHub()}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /ws", s.handleWS)
