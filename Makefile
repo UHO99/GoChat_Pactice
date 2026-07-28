@@ -1,11 +1,23 @@
 server:
 	go run ./step$(SERVER)_*/cmd
 
-send:
+QUERY :=
 ifdef NICKNAME
-	wscat -c "ws://localhost:808$(SERVER)/ws?nickname=$(NICKNAME)"
+QUERY := nickname=$(NICKNAME)
+endif
+ifdef ROOM
+ifdef NICKNAME
+QUERY := $(QUERY)&room=$(ROOM)
 else
-	wscat -c ws://localhost:808$(SERVER)/ws
+QUERY := room=$(ROOM)
+endif
+endif
+
+send:
+ifdef QUERY
+	wscat -c "ws://localhost:808$(SERVER)/ws?$(QUERY)"
+else
+	wscat -c "ws://localhost:808$(SERVER)/ws"
 endif
 
 .PHONY: server send
