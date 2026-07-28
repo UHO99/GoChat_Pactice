@@ -1,10 +1,11 @@
-server1:
-	go run ./step1_simple_echo/cmd
-
-server2:
-	go run ./step2_simple_multi_broadcast/cmd
+server:
+	go run ./step$(SERVER)_*/cmd
 
 send:
-	wscat -c ws://localhost:8080/ws
+ifdef NICKNAME
+	wscat -c "ws://localhost:808$(SERVER)/ws?nickname=$(NICKNAME)"
+else
+	wscat -c ws://localhost:808$(SERVER)/ws
+endif
 
-.PHONY: server1 server2 send
+.PHONY: server send

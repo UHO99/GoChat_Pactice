@@ -3,8 +3,9 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	StepOnePort string `mapstructure:"STEP1_PORT"`
-	StepTwoPort string `mapstructure:"STEP2_PORT"`
+	StepOnePort   string `mapstructure:"STEP1_PORT"`
+	StepTwoPort   string `mapstructure:"STEP2_PORT"`
+	StepThreePort string `mapstructure:"STEP3_PORT"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
