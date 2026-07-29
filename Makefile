@@ -20,4 +20,7 @@ else
 	wscat -c "ws://localhost:808$(SERVER)/ws"
 endif
 
-.PHONY: server send
+sqlc:
+	sqlc generate
+
+.PHONY: server send sqlc

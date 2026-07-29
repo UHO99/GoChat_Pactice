@@ -8,6 +8,7 @@ type Config struct {
 	StepThreePort string `mapstructure:"STEP3_PORT"`
 	StepFourPort  string `mapstructure:"STEP4_PORT"`
 	StepFivePort  string `mapstructure:"STEP5_PORT"`
+	StepSixPort   string `mapstructure:"STEP6_PORT"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

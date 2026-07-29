@@ -13,6 +13,12 @@ STEP1_PORT=8080
 STEP2_PORT=8081
 ```
 
+### 스키마 생성 (마이그레이션)
+- `up` `down` 마이그레이션 SQL 생성
+```bash
+migrate create -ext sql -dir [생성 폴더] -seq [생성 이름]
+``` 
+
 ### 서버 실행
 ```bash
 # STEP1 (echo 서버)
