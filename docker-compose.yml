@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres
+    container_name: gochat-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gochat
+      POSTGRES_PASSWORD: gochat
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gochat -d gochat"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s

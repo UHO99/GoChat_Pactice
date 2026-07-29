@@ -1,3 +1,5 @@
+DB_URL=postgres://gochat:gochat@localhost:5432/gochat?sslmode=disable
+
 server:
 	go run ./step$(SERVER)_*/cmd
 
@@ -23,4 +25,19 @@ endif
 sqlc:
 	sqlc generate
 
-.PHONY: server send sqlc
+postgres:
+	docker compose up -d
+
+createdb:
+	docker compose exec postgres createdb --username=gochat --owner=gochat gochat
+
+dropdb:
+	docker compose exec postgres dropdb --username=gochat gochat
+
+migrateup:
+	migrate -path db/migration -database "$(DB_URL)" -verbose up
+
+migratedown:
+	migrate -path db/migration -database "$(DB_URL)" -verbose down
+
+.PHONY: server send sqlc createdb dropdb migrateup migratedo postgres

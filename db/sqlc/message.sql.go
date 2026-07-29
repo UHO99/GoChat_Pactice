@@ -7,8 +7,6 @@ package db
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const insertMessage = `-- name: InsertMessage :one
@@ -34,54 +32,4 @@ func (q *Queries) InsertMessage(ctx context.Context, arg InsertMessageParams) (M
 		&i.CreatedAt,
 	)
 	return i, err
-}
-
-const listRecentMessages = `-- name: ListRecentMessages :many
-SELECT m.id, m.room_id, m.user_id, m.content, m.created_at, u.nickname
-FROM messages m
-JOIN users u ON u.id = m.user_id
-WHERE m.room_id = $1
-ORDER BY m.created_at DESC
-LIMIT $2
-`
-
-type ListRecentMessagesParams struct {
-	RoomID int64 `json:"room_id"`
-	Limit  int32 `json:"limit"`
-}
-
-type ListRecentMessagesRow struct {
-	ID        int64              `json:"id"`
-	RoomID    int64              `json:"room_id"`
-	UserID    int64              `json:"user_id"`
-	Content   string             `json:"content"`
-	CreatedAt pgtype.Timestamptz `json:"created_at"`
-	Nickname  string             `json:"nickname"`
-}
-
-func (q *Queries) ListRecentMessages(ctx context.Context, arg ListRecentMessagesParams) ([]ListRecentMessagesRow, error) {
-	rows, err := q.db.Query(ctx, listRecentMessages, arg.RoomID, arg.Limit)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []ListRecentMessagesRow
-	for rows.Next() {
-		var i ListRecentMessagesRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.RoomID,
-			&i.UserID,
-			&i.Content,
-			&i.CreatedAt,
-			&i.Nickname,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }
