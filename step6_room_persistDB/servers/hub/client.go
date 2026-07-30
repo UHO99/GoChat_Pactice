@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"gochat/db/store"
 	"gochat/step6_room_persistDB/servers/messages"
 	"io"
 	"log"
@@ -23,14 +24,19 @@ type Client struct {
 	room     *Room
 	nickname string
 	send     chan []byte
+
+	store  *store.Store
+	userID int64
 }
 
-func NewClient(conn *websocket.Conn, room *Room, nickname string) *Client {
+func NewClient(conn *websocket.Conn, room *Room, nickname string, st *store.Store, userID int64) *Client {
 	return &Client{
 		conn:     conn,
 		room:     room,
 		nickname: nickname,
 		send:     make(chan []byte, sendBuffer),
+		store:    st,
+		userID:   userID,
 	}
 }
 
@@ -69,6 +75,10 @@ func (c *Client) readPump(ctx context.Context) {
 		if err := json.Unmarshal(data, &in); err != nil || in.Content == "" {
 			log.Printf("Cannot Unmarshal : %v", data)
 			continue
+		}
+
+		if _, err := c.store.InsertMessage(ctx, c.room.id, c.userID, in.Content); err != nil {
+			log.Printf("cannot persist message from %s : %v", c.nickname, err)
 		}
 
 		c.room.Broadcast(c.event(messages.TypeMessage, in.Content))

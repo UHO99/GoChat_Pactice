@@ -1,7 +1,8 @@
 package api
 
 import (
-	servers "gochat/step6_room_persistDB/servers/hub"
+	"gochat/db/store"
+	"gochat/step6_room_persistDB/servers/hub"
 	"net/http"
 )
 
@@ -11,13 +12,20 @@ type Options struct {
 
 type Server struct {
 	httpServer *http.Server
-	hub        *servers.Hub
+	hub        *hub.Hub
+	store      *store.Store
 }
 
-func New(opts Options) *Server {
-	s := &Server{hub: servers.NewHub()}
+func New(h *hub.Hub, st *store.Store, opts Options) *Server {
+	s := &Server{
+		hub:   h,
+		store: st,
+	}
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("POST /users", s.handleCreateUser)
+	mux.HandleFunc("POST /rooms", s.handleCreateRoom)
+	mux.HandleFunc("GET /rooms", s.handleListRooms)
 	mux.HandleFunc("GET /ws", s.handleWS)
 
 	s.httpServer = &http.Server{

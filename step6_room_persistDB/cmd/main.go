@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"gochat/config"
+	"gochat/db/store"
 	"gochat/step6_room_persistDB/api"
+	"gochat/step6_room_persistDB/servers/hub"
 	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -21,7 +23,10 @@ func main() {
 	}
 	defer pool.Close()
 
-	srv := api.New(api.Options{Addr: ":" + cfg.StepSixPort})
+	h := hub.NewHub()
+	st := store.New(pool)
+
+	srv := api.New(h, st, api.Options{Addr: ":" + cfg.StepSixPort})
 
 	if err := srv.ListenAndServe(); err != nil {
 		log.Fatal("cannot start server : ", err)

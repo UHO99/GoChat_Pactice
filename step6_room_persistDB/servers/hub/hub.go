@@ -14,17 +14,16 @@ func NewHub() *Hub {
 	return &Hub{rooms: make(map[string]*Room)}
 }
 
-func (h *Hub) Room(name string) *Room {
+func (h *Hub) Room(id int64, name string) *Room {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
 	r, ok := h.rooms[name]
 	if !ok {
-		r = newRoom(name)
+		r = newRoom(id, name)
 		h.rooms[name] = r
 		log.Println("방 생성 : " + name)
 	}
 
-	log.Println("방 입장 : " + name)
 	return r
 }

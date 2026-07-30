@@ -22,6 +22,17 @@ func (q *Queries) CreateRoom(ctx context.Context, name string) (Room, error) {
 	return i, err
 }
 
+const getRoomByName = `-- name: GetRoomByName :one
+SELECT id, name, created_at FROM rooms WHERE name = $1
+`
+
+func (q *Queries) GetRoomByName(ctx context.Context, name string) (Room, error) {
+	row := q.db.QueryRow(ctx, getRoomByName, name)
+	var i Room
+	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
+	return i, err
+}
+
 const listRooms = `-- name: ListRooms :many
 SELECT id, name, created_at FROM rooms ORDER BY name
 `

@@ -6,13 +6,15 @@ import (
 )
 
 type Room struct {
+	id      int64
 	name    string
 	mu      sync.Mutex
 	clients map[*Client]struct{}
 }
 
-func newRoom(name string) *Room {
+func newRoom(id int64, name string) *Room {
 	return &Room{
+		id:      id,
 		name:    name,
 		clients: make(map[*Client]struct{}),
 	}

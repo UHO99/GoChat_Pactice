@@ -11,6 +11,8 @@ import (
 type Querier interface {
 	CreateRoom(ctx context.Context, name string) (Room, error)
 	CreateUser(ctx context.Context, nickname string) (User, error)
+	GetRoomByName(ctx context.Context, name string) (Room, error)
+	GetUser(ctx context.Context, nickname string) (User, error)
 	InsertMessage(ctx context.Context, arg InsertMessageParams) (Message, error)
 	ListRooms(ctx context.Context) ([]Room, error)
 }

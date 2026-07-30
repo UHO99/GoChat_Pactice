@@ -28,8 +28,16 @@ func (s *Store) CreateUser(ctx context.Context, nickname string) (db.User, error
 	return s.query.CreateUser(ctx, nickname)
 }
 
+func (s *Store) GetUser(ctx context.Context, nickname string) (db.User, error) {
+	return s.query.GetUser(ctx, nickname)
+}
+
 func (s *Store) CreateRoom(ctx context.Context, name string) (db.Room, error) {
 	return s.query.CreateRoom(ctx, name)
+}
+
+func (s *Store) GetRoomByName(ctx context.Context, name string) (db.Room, error) {
+	return s.query.GetRoomByName(ctx, name)
 }
 
 func (s *Store) InsertMessage(ctx context.Context, roomID, userID int64, content string) (db.Message, error) {
