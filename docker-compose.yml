@@ -8,3 +8,10 @@ services:
       POSTGRES_PASSWORD: 1234
     ports:
       - "5433:5432"
+
+  redis:
+    image: redis
+    container_name: gochat-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"

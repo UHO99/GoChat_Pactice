@@ -207,3 +207,6 @@ wscat -c "ws://localhost:8086/ws?nickname=uho&room=general"
 Connected (press CTRL+C to quit)
 < {"type":"join","room":"general","nickname":"uho","sentAt":"2026-07-30T17:38:25.997600835+09:00"}
 ```
+
+## 6. 시퀀스
+![alt text](<STEP6 시퀀스.png>)
